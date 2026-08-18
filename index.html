@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七夕快乐，我的最爱 ❤️</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <!-- ===== 背景层 ===== -->
+    <canvas id="starfield"></canvas>
+    <canvas id="hearts"></canvas>
+    <canvas id="fireworks"></canvas>
+
+    <!-- 月亮 -->
+    <div class="moon"></div>
+
+    <!-- ===== 主内容 ===== -->
+    <div class="content">
+
+        <!-- 首屏 -->
+        <section class="hero">
+            <div class="hero-heart">💕</div>
+            <h1>七夕快乐</h1>
+            <p class="subtitle">有 你 的 每 一 天 都 是 佳 节</p>
+            <div class="love-days">
+                <span>我们已经在一起</span><br>
+                <span class="number" id="love-days-number">0</span><br>
+                天了，想你 ❤️
+            </div>
+            <div class="scroll-hint">↓</div>
+        </section>
+
+        <!-- 情书 -->
+        <section class="letter-section">
+            <div class="letter" id="letter">
+                <div class="greeting">亲爱的老婆：</div>
+                <div class="letter-body">
+                    <p class="letter-p">又是一年七夕节，天上的牛郎织女一年才能见一次，而我很幸运，每天都能见到你。</p>
+                    <p class="letter-p">遇见你，是我这辈子最幸福的事。你的笑容是我每天最期待的阳光，你的声音是世界上最好听的音乐。和你在一起的每一天，都让我觉得生活如此美好。</p>
+                    <p class="letter-p">谢谢你包容我的不完美，谢谢你愿意牵着我的手一起走过每一个平凡却珍贵的日子。未来的路还很长，我想一直陪在你身边，一起看日出日落，一起把柴米油盐过成诗。</p>
+                    <p class="letter-p">七夕快乐，我的宝贝。愿你每天都被爱包围，愿我们的爱细水长流。</p>
+                </div>
+                <div class="signature">
+                    永远爱你的老公<br>
+                    <span id="current-date"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 照片墙 -->
+        <section class="gallery-section">
+            <h2>我们的照片</h2>
+            <p class="section-desc">点击翻牌，每一张都有惊喜 ✨</p>
+            <div class="gallery-grid" id="gallery">
+
+                <!-- 照片 1 — 替换说明见 README.md -->
+                <div class="gallery-item">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="placeholder">
+                                <span class="icon">📸</span>
+                                <span>替换为合照 1</span>
+                            </div>
+                            <!-- 放图片后取消注释：<img src="./images/photo1.jpg" alt=""> -->
+                        </div>
+                        <div class="card-back">
+                            <div class="back-emoji">💑</div>
+                            <div class="back-text">第一次见面的日子<br>我的心就为你跳快了</div>
+                        </div>
+                    </div>
+                    <span class="flip-hint">点击翻牌</span>
+                </div>
+
+                <!-- 照片 2 -->
+                <div class="gallery-item">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="placeholder">
+                                <span class="icon">📸</span>
+                                <span>替换为合照 2</span>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="back-emoji">✈️</div>
+                            <div class="back-text">一起旅行的回忆<br>风景再美也不如你</div>
+                        </div>
+                    </div>
+                    <span class="flip-hint">点击翻牌</span>
+                </div>
+
+                <!-- 照片 3 -->
+                <div class="gallery-item">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="placeholder">
+                                <span class="icon">📸</span>
+                                <span>替换为合照 3</span>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="back-emoji">😊</div>
+                            <div class="back-text">你的笑容最美<br>是治愈一切的魔法</div>
+                        </div>
+                    </div>
+                    <span class="flip-hint">点击翻牌</span>
+                </div>
+
+                <!-- 照片 4 -->
+                <div class="gallery-item">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="placeholder">
+                                <span class="icon">📸</span>
+                                <span>替换为合照 4</span>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="back-emoji">🍜</div>
+                            <div class="back-text">幸福就是这么简单<br>有你在身边就是幸福</div>
+                        </div>
+                    </div>
+                    <span class="flip-hint">点击翻牌</span>
+                </div>
+
+                <!-- 照片 5 -->
+                <div class="gallery-item">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="placeholder">
+                                <span class="icon">📸</span>
+                                <span>替换为合照 5</span>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="back-emoji">🚶‍♂️🚶‍♀️</div>
+                            <div class="back-text">想和你一直这样走下去<br>走到白发苍苍</div>
+                        </div>
+                    </div>
+                    <span class="flip-hint">点击翻牌</span>
+                </div>
+
+                <!-- 照片 6 -->
+                <div class="gallery-item">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="placeholder">
+                                <span class="icon">📸</span>
+                                <span>替换为合照 6</span>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="back-emoji">🌅</div>
+                            <div class="back-text">你是我生命中最美的风景<br>没有之一</div>
+                        </div>
+                    </div>
+                    <span class="flip-hint">点击翻牌</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 底部 -->
+        <footer class="footer">
+            <div class="heart-line">❤ ❤ ❤</div>
+            <p>Made with love, for the one I love most.</p>
+        </footer>
+    </div>
+
+    <!-- ===== 彩蛋弹窗 ===== -->
+    <div class="easter-egg-popup" id="easter-egg-popup">
+        <div class="easter-egg-box">
+            <div class="egg-emoji">🎁</div>
+            <div class="egg-text" id="easter-egg-text"></div>
+            <button class="close-btn" id="easter-egg-close">我知道啦 ❤️</button>
+        </div>
+    </div>
+
+    <!-- ===== 暗号输入框 ===== -->
+    <div class="secret-input-wrap">
+        <label>💬</label>
+        <input type="text" id="secret-input" placeholder="..." maxlength="20">
+    </div>
+
+    <!-- ===== 脚本 ===== -->
+    <script src="./js/starfield.js"></script>
+    <script src="./js/effects.js"></script>
+    <script src="./js/easter-eggs.js"></script>
+
+</body>
+</html>

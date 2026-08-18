@@ -1,0 +1,474 @@
+/* ================================
+   基础 & 布局
+   ================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #0a0a2e;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.content { position: relative; z-index: 10; }
+
+/* ================================
+   Canvas 层
+   ================================ */
+#starfield, #hearts, #fireworks {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+}
+#starfield { z-index: 0; }
+#hearts     { z-index: 5; }
+#fireworks  { z-index: 50; }
+
+/* ================================
+   月亮
+   ================================ */
+.moon {
+    position: fixed;
+    top: 40px; right: 60px;
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff8e1, #ffe082);
+    box-shadow: 0 0 40px 10px rgba(255, 243, 188, 0.35);
+    z-index: 3;
+    transition: transform 0.3s ease-out;
+    pointer-events: none;
+}
+/* 月亮阴影制造月牙 */
+.moon::after {
+    content: '';
+    position: absolute;
+    top: -8px; left: 18px;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: #0a0a2e;
+}
+
+/* ================================
+   流星
+   ================================ */
+.shooting-star {
+    position: fixed;
+    width: 120px; height: 2px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.9), transparent);
+    border-radius: 50%;
+    animation: shoot 1.5s ease-in-out forwards;
+    z-index: 1;
+    pointer-events: none;
+}
+@keyframes shoot {
+    0%   { transform: translateX(0) translateY(0); opacity: 1; }
+    100% { transform: translateX(400px) translateY(300px); opacity: 0; }
+}
+
+/* ================================
+   首屏 Hero
+   ================================ */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+.hero-heart {
+    font-size: 4rem;
+    animation: heartbeat 1.2s ease-in-out infinite;
+    margin-bottom: 1.5rem;
+}
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15%      { transform: scale(1.25); }
+    30%      { transform: scale(1); }
+    45%      { transform: scale(1.15); }
+}
+
+.hero h1 {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #ff6b9d, #ffa8cc, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s;
+}
+.hero h1:active { transform: scale(1.05); }
+
+.hero .subtitle {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    color: rgba(255,255,255,0.7);
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    margin-bottom: 2rem;
+}
+
+.hero .love-days {
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    color: rgba(255,255,255,0.6);
+    line-height: 2;
+}
+.hero .love-days .number {
+    font-size: 2.5em;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ff6b9d, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    animation: bounce 2s infinite;
+    font-size: 1.5rem;
+    opacity: 0.6;
+}
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40%  { transform: translateY(-15px); }
+    60%  { transform: translateY(-8px); }
+}
+
+/* ================================
+   情书
+   ================================ */
+.letter-section {
+    padding: 6rem 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.letter {
+    max-width: 640px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    line-height: 2;
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.85);
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease;
+    overflow: hidden;
+}
+.letter.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.letter .greeting {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    color: #ffa8cc;
+}
+.letter .signature {
+    text-align: right;
+    margin-top: 2rem;
+    color: #ffa8cc;
+    font-style: italic;
+}
+
+/* 打字机光标 */
+.letter .typing-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: #ffa8cc;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 0.7s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ================================
+   照片墙 — 翻牌
+   ================================ */
+.gallery-section {
+    padding: 4rem 2rem 6rem;
+    text-align: center;
+}
+.gallery-section h2 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ff6b9d, #ffa8cc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.gallery-section .section-desc {
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 3rem;
+    font-size: 0.95rem;
+}
+
+.gallery-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: 16px;
+    aspect-ratio: 4/3;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    perspective: 800px;
+}
+.gallery-item.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* 卡片翻转容器 */
+.card-inner {
+    position: relative;
+    width: 100%; height: 100%;
+    transition: transform 0.6s ease;
+    transform-style: preserve-3d;
+}
+.gallery-item.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.card-front {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.card-front img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0; left: 0;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(255,107,157,0.2), rgba(255,168,204,0.15));
+    border: 1px solid rgba(255,107,157,0.3);
+}
+.card-back .back-emoji {
+    font-size: 2.5rem;
+    margin-bottom: 0.8rem;
+}
+.card-back .back-text {
+    font-size: 1rem;
+    color: #ffa8cc;
+    text-align: center;
+    line-height: 1.6;
+}
+
+/* 占位 */
+.placeholder {
+    color: rgba(255,255,255,0.3);
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+.placeholder .icon { font-size: 2.5rem; }
+
+/* 翻转提示 */
+.flip-hint {
+    position: absolute;
+    bottom: 8px; right: 12px;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.25);
+    z-index: 2;
+}
+
+/* ================================
+   花瓣雨
+   ================================ */
+.petal {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: #ff8fb1;
+    border-radius: 50% 0 50% 50%;
+    opacity: 0.8;
+    z-index: 200;
+    pointer-events: none;
+    animation: petalFall linear forwards;
+}
+@keyframes petalFall {
+    0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+    100% { opacity: 0; transform: translateY(100vh) rotate(720deg) scale(0.4); }
+}
+
+/* ================================
+   暗号输入框
+   ================================ */
+.secret-input-wrap {
+    position: fixed;
+    bottom: 24px; left: 24px;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.25;
+    transition: opacity 0.3s;
+}
+.secret-input-wrap:hover { opacity: 1; }
+.secret-input-wrap input {
+    width: 60px;
+    padding: 4px 8px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-size: 0.8rem;
+    outline: none;
+}
+.secret-input-wrap input::placeholder { color: rgba(255,255,255,0.3); }
+.secret-input-wrap label {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+}
+
+/* ================================
+   彩蛋弹窗
+   ================================ */
+.easter-egg-popup {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.7);
+}
+.easter-egg-popup.active { display: flex; }
+
+.easter-egg-box {
+    background: linear-gradient(135deg, #1a0a2e, #2a1040);
+    border: 1px solid rgba(255,107,157,0.4);
+    border-radius: 24px;
+    padding: 3rem 2.5rem;
+    max-width: 480px;
+    text-align: center;
+    animation: popIn 0.5s ease;
+}
+@keyframes popIn {
+    0%   { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.easter-egg-box .egg-emoji { font-size: 3rem; margin-bottom: 1rem; }
+.easter-egg-box .egg-text {
+    font-size: 1.2rem;
+    color: #ffa8cc;
+    line-height: 2;
+    margin-bottom: 1.5rem;
+}
+.easter-egg-box .close-btn {
+    background: rgba(255,107,157,0.3);
+    border: 1px solid rgba(255,107,157,0.5);
+    color: #fff;
+    padding: 8px 28px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+}
+.easter-egg-box .close-btn:hover { background: rgba(255,107,157,0.5); }
+
+/* ================================
+   底部
+   ================================ */
+.footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.85rem;
+}
+.footer .heart-line {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #ff6b9d;
+}
+
+/* ================================
+   灯箱
+   ================================ */
+.lightbox {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.lightbox.active { display: flex; }
+.lightbox img {
+    max-width: 90%; max-height: 90%;
+    border-radius: 12px;
+    box-shadow: 0 0 60px rgba(255,107,157,0.3);
+}
+
+/* ================================
+   鼠标爱心拖尾
+   ================================ */
+.mouse-heart {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    font-size: 16px;
+    animation: mouseHeartFade 0.8s ease forwards;
+}
+@keyframes mouseHeartFade {
+    0%   { opacity: 1; transform: scale(1) translateY(0); }
+    100% { opacity: 0; transform: scale(0.3) translateY(-30px); }
+}
+
+/* ================================
+   响应式
+   ================================ */
+@media (max-width: 600px) {
+    .letter { padding: 2rem 1.5rem; font-size: 0.95rem; }
+    .gallery-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .moon { width: 50px; height: 50px; top: 24px; right: 24px; }
+    .moon::after { width: 44px; height: 44px; left: 12px; top: -6px; }
+    .secret-input-wrap { bottom: 12px; left: 12px; }
+}

@@ -229,7 +229,7 @@ body {
 .gallery-item {
     position: relative;
     border-radius: 16px;
-    aspect-ratio: 4/3;
+    padding-bottom: 75%; /* 4:3 比例 */
     cursor: pointer;
     opacity: 0;
     transform: translateY(30px) scale(0.95);

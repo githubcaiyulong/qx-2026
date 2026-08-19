@@ -9,9 +9,213 @@ body {
     background: #0a0a2e;
     color: #fff;
     overflow-x: hidden;
+    overflow-y: auto;
 }
 
-.content { position: relative; z-index: 10; }
+body.envelope-active {
+    overflow: hidden;
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+}
+
+/* 开屏时主内容隐藏 */
+body.envelope-active .content {
+    visibility: hidden;
+}
+body.envelope-active .easter-hint-bar {
+    display: none !important;
+}
+body.envelope-active canvas {
+    display: none;
+}
+body.envelope-active .moon {
+    display: none;
+}
+
+/* ================================
+   七夕信封开屏
+   ================================ */
+.envelope-splash {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0a0a2e 0%, #1a0a2e 50%, #0a0a2e 100%);
+    transition: opacity 0.8s ease;
+}
+.envelope-splash.opening {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 星星背景 */
+.envelope-stars {
+    position: absolute;
+    width: 100%; height: 100%;
+    overflow: hidden;
+}
+.envelope-stars span {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    animation: envStarTwinkle 3s ease-in-out infinite;
+}
+@keyframes envStarTwinkle {
+    0%, 100% { opacity: 0.2; }
+    50%      { opacity: 1; }
+}
+
+/* 信封本体 */
+.envelope-wrapper {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.envelope-card {
+    width: min(320px, 80vw);
+    height: min(220px, 55vw);
+    background: linear-gradient(145deg, #fff5f5, #ffe8e8);
+    border-radius: 16px;
+    position: relative;
+    box-shadow:
+        0 20px 60px rgba(255, 107, 157, 0.3),
+        0 0 100px rgba(255, 107, 157, 0.15),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    animation: envelopeFloat 3s ease-in-out infinite;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.envelope-card:hover {
+    transform: scale(1.03);
+    box-shadow:
+        0 25px 80px rgba(255, 107, 157, 0.4),
+        0 0 120px rgba(255, 107, 157, 0.2),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+}
+@keyframes envelopeFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+
+/* 信封封条（V 形折角） */
+.envelope-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: min(90px, 22vw) min(160px, 40vw) 0 min(160px, 40vw);
+    border-color: #ffcdd2 transparent transparent transparent;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+.envelope-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: min(90px, 22vw) min(160px, 40vw) 0 min(160px, 40vw);
+    border-color: #ffcdd2 min(160px, 40vw) transparent transparent;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+/* 信封爱心印章 */
+.envelope-seal {
+    position: absolute;
+    top: min(50px, 14vw);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    z-index: 3;
+    filter: drop-shadow(0 2px 6px rgba(255, 50, 80, 0.4));
+    animation: sealPulse 1.5s ease-in-out infinite;
+}
+@keyframes sealPulse {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50%      { transform: translateX(-50%) scale(1.15); }
+}
+
+/* 信封上的文字 */
+.envelope-text {
+    position: relative;
+    z-index: 2;
+    margin-top: min(28px, 6vw);
+}
+.envelope-text .from {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.5rem;
+}
+.envelope-text .to {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.3em;
+}
+
+/* 点击提示 */
+.envelope-hint {
+    margin-top: min(24px, 5vw);
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.15em;
+    animation: hintPulseEnv 2s ease-in-out infinite;
+}
+@keyframes hintPulseEnv {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 1; }
+}
+
+/* 加载进度条 */
+.envelope-progress {
+    position: absolute;
+    bottom: min(60px, 10vw);
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(200px, 50vw);
+    text-align: center;
+    z-index: 2;
+}
+.envelope-progress .bar-bg {
+    width: 100%;
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+.envelope-progress .bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff6b9d, #ffa8cc, #ffd700);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+.envelope-progress .progress-text {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.35);
+}
+
+@media (max-width: 600px) {
+    .envelope-card {
+        width: 85vw;
+        height: 55vw;
+    }
+    .envelope-card::before,
+    .envelope-card::after {
+        border-width: 25vw 42vw 0 42vw;
+    }
+}
 
 /* ================================
    Canvas 层

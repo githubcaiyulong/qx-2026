@@ -6,7 +6,26 @@
     <title>帮我测试一下这个链接</title>
     <link rel="stylesheet" href="./css/style.css">
 </head>
-<body>
+<body class="envelope-active">
+
+    <!-- ===== 七夕信封开屏 ===== -->
+    <div class="envelope-splash" id="envelope-splash">
+        <div class="envelope-stars" id="envelope-stars"></div>
+        <div class="envelope-wrapper" id="envelope-wrapper">
+            <div class="envelope-card">
+                <div class="envelope-seal">💌</div>
+            </div>
+            <div class="envelope-text">
+                <div class="from">来自老公的一封信</div>
+                <div class="to">致 最爱的老婆</div>
+            </div>
+            <div class="envelope-hint" id="envelope-hint">点击打开</div>
+        </div>
+        <div class="envelope-progress" id="envelope-progress">
+            <div class="progress-text" id="progress-text">正在准备惊喜...</div>
+            <div class="bar-bg"><div class="bar-fill" id="bar-fill"></div></div>
+        </div>
+    </div>
 
     <!-- ===== 背景层 ===== -->
     <canvas id="starfield"></canvas>
@@ -183,6 +202,98 @@
     <script src="./js/starfield.js"></script>
     <script src="./js/effects.js"></script>
     <script src="./js/easter-eggs.js"></script>
+
+    <!-- ===== 开屏信封 + 预加载 ===== -->
+    <script>
+    (function() {
+        // 生成信封星星
+        const starsEl = document.getElementById('envelope-stars');
+        for (let i = 0; i < 60; i++) {
+            const s = document.createElement('span');
+            s.style.left = Math.random() * 100 + '%';
+            s.style.top = Math.random() * 100 + '%';
+            s.style.animationDelay = Math.random() * 3 + 's';
+            s.style.animationDuration = (2 + Math.random() * 2) + 's';
+            starsEl.appendChild(s);
+        }
+
+        const splash = document.getElementById('envelope-splash');
+        const wrapper = document.getElementById('envelope-wrapper');
+        const hint = document.getElementById('envelope-hint');
+        const barFill = document.getElementById('bar-fill');
+        const progressText = document.getElementById('progress-text');
+        const body = document.body;
+
+        // 预加载所有图片
+        const images = document.querySelectorAll('.card-front img');
+        const total = images.length;
+        let loaded = 0;
+        let opened = false;
+
+        function updateProgress() {
+            loaded++;
+            const pct = Math.round((loaded / total) * 100);
+            barFill.style.width = pct + '%';
+            if (pct < 100) {
+                progressText.textContent = '正在准备惊喜... ' + pct + '%';
+            } else {
+                progressText.textContent = '准备就绪 ❤️';
+                hint.textContent = '点击打开';
+                hint.style.opacity = '1';
+            }
+        }
+
+        // 开始预加载
+        images.forEach(img => {
+            const src = img.src;
+            const tempImg = new Image();
+            tempImg.onload = tempImg.onerror = updateProgress;
+            tempImg.src = src;
+            // 已缓存的情况
+            if (img.complete && img.naturalWidth > 0) {
+                updateProgress();
+            }
+        });
+
+        // 如果 5 秒内没全加载完也允许打开
+        let canOpen = false;
+        setTimeout(() => {
+            canOpen = true;
+            if (loaded < total) {
+                hint.textContent = '点击打开';
+                hint.style.opacity = '1';
+            }
+        }, 5000);
+
+        if (total === 0) {
+            // 没有图片直接可以打开
+            canOpen = true;
+        }
+
+        // 点击信封打开
+        wrapper.addEventListener('click', () => {
+            if (!canOpen && loaded < total && !opened) return;
+            opened = true;
+
+            // 撒花瓣
+            if (typeof createPetalRain === 'function') createPetalRain();
+
+            // 开屏消失
+            splash.classList.add('opening');
+            body.classList.remove('envelope-active');
+            body.style.overflow = 'auto';
+
+            // 完全消失后移除 DOM
+            setTimeout(() => {
+                splash.style.display = 'none';
+            }, 1000);
+
+            // 自动滚到顶部
+            window.scrollTo(0, 0);
+        });
+    })();
+    </script>
+
     <script>
         // 图片加载处理 — shimmer + 淡入
         document.querySelectorAll('.card-front img').forEach(img => {

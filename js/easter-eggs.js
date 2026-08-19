@@ -167,27 +167,15 @@ document.getElementById('letter') && observer.observe(document.getElementById('l
 document.querySelectorAll('.gallery-item').forEach(item => observer.observe(item));
 
 // ============================
-//  灯箱
+//  照片翻牌
 // ============================
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightbox-img');
-
 document.getElementById('gallery')?.addEventListener('click', (e) => {
     const item = e.target.closest('.gallery-item');
     if (!item) return;
-
-    // 先尝试翻转
-    const hasImg = item.querySelector('.card-front img');
-    if (hasImg) {
-        // 有图片才翻转
-        item.classList.toggle('flipped');
-        e.stopPropagation();
-        return;
-    }
-    // 无图片不翻转
+    // 阻止冒泡到烟花
+    e.stopPropagation();
+    item.classList.toggle('flipped');
 });
-
-lightbox?.addEventListener('click', () => lightbox.classList.remove('active'));
 
 // ============================
 //  暗号输入
